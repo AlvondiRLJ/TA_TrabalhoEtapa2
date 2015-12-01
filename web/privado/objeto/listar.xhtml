@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">
+            Manutenção de Objetos
+        </ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem" prependId="false">
+                <p:growl/>
+                <p:commandButton value="Novo Objeto"
+                                 actionListener="#{controleObjeto.novo()}"
+                                 update=":formEdicao"
+                                 process="@form"
+                                 oncomplete="PF('dlg').show();"/>
+                <p:dataTable value="#{controleObjeto.dao.listarTodos}"
+                             var="obj">
+                    <f:facet name="footer">
+                        <div align="center">
+                            <p:outputLabel value="Total de registros: #{controleObjeto.dao.listarTodos.size()}"/>
+                        </div>
+                    </f:facet>
+                    <p:column headerText="Codigo">
+                        <p:outputLabel value="#{obj.codigo}"/>
+                    </p:column>
+                    <p:column headerText="Descricao">
+                        <p:outputLabel value="#{obj.descricao}"/>
+                    </p:column>    
+                    <p:column headerText="Ações">
+                        <div align="center">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{controleObjeto.editar(obj.codigo)}"
+                                             oncomplete="PF('dlg').show();"
+                                             update=":formEdicao"
+                                             process="@form"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             action="#{controleObjeto.remover(obj.codigo)}"
+                                             update="@form" process="@form"
+                                             onclick="if (!confirm('Confirma a exclusão do objeto?'))
+                                                         return false"/>                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+        </ui:define>
+        <ui:define name="dialogos">
+            <p:dialog header="Edição" widgetVar="dlg"
+                      resizable="false" modal="true" width="550" height="580">
+                <h:form id="formEdicao" prependId="false">
+                    <p:growl id="growl"/>
+                    <p:tabView id="tab">
+                        <p:tab title="Dados Principais">
+                            <div align="center">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="footer">
+                                        <div align="center">
+                                            <p:commandButton actionListener="#{controleObjeto.salvar()}"
+                                                             update=":formListagem :formEdicao"
+                                                             value="Salvar"
+                                                             icon="ui-icon-disk"
+                                                             oncomplete="if (!args.validationFailed) {PF('dlg').hide();}"/>
+                                        </div>                            
+                                    </f:facet>
+                                    <p:outputLabel value="Codigo"/>
+                                    <p:inputText value="#{controleObjeto.objeto.codigo}" readonly="true" size="5"/>
+                                    <p:outputLabel value="Descricao" for="txtDescricao"/>
+                                    <p:inputText value="#{controleObjeto.objeto.descricao}" id="txtDescricao" 
+                                                 size="50" maxlength="50"/>
+                                    <p:outputLabel value="Valor" for="txtValor"/>
+                                    <p:inputText value="#{controleObjeto.objeto.valor}" id="txtValor"
+                                                 size="14"/>
+                                </p:panelGrid>
+                            </div>
+                        </p:tab>
+                    </p:tabView>
+                </h:form>         
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -59,13 +59,11 @@ public class ControleCidade {
         return "listar";
     }
 
-    public String editar(Integer id) {
+    public void editar(Integer id) {
         try {
             objeto = dao.getObjectById(id);
-            return "formulario";
         } catch (Exception e) {
             Util.mensagemErro("Erro ao recuperar objeto: "+e.getMessage());
-            return "listar";
         }
     }
     

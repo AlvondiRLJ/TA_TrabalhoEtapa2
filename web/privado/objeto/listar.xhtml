@@ -18,7 +18,8 @@
                                  process="@form"
                                  oncomplete="PF('dlg').show();"/>
                 <p:dataTable value="#{controleObjeto.dao.listarTodos}"
-                             var="obj">
+                             var="obj"
+                             emptyMessage="Nenhum registro encontrado">
                     <f:facet name="footer">
                         <div align="center">
                             <p:outputLabel value="Total de registros: #{controleObjeto.dao.listarTodos.size()}"/>
@@ -41,11 +42,10 @@
                                              action="#{controleObjeto.remover(obj.codigo)}"
                                              update="@form" process="@form"
                                              onclick="if (!confirm('Confirma a exclusão do objeto?'))
-                                                         return false"/>                            
+                                             return false"/>                            
                         </div>
                     </p:column>
                 </p:dataTable>
-
             </h:form>
         </ui:define>
         <ui:define name="dialogos">
